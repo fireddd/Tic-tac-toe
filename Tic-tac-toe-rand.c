@@ -86,15 +86,15 @@ int findThreeInARow(const int * board,const int cell,int side)
 		//
 			if(count==4)
 			{
-				printf("dir is %d  cell is %d \n",dir,cell);
-				printf("posdir is %d negdir is %d \n",posdir,negdir);
+				//printf("dir is %d  cell is %d \n",dir,cell);
+				//printf("posdir is %d negdir is %d \n",posdir,negdir);
 
 				return 1;
 			}
 			else
 			 	count=0;
 			}
-	printf("count %d \n \n",count);
+	//printf("count %d \n \n",count);
 	return 0;
 
 }
@@ -196,7 +196,7 @@ void runGame()
 				printf("Human wins \n \n");
 			Gameover=1;
 		}
-		if(!hasEmpty(board))
+		if(!hasEmpty(board)&&Gameover==0)
 		{
 			printf("Game Over \n \n");
 			printf("It is a draw \n \n");

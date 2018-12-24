@@ -60,31 +60,40 @@ int getDirections(const int* board,const int dir,const int cell,int side)
 	int index=cell;
 	while(board[index]!=BORDER)
 	{
-		index=index+dir;
+		
 		if(board[index]==side)
 		{
 			found++;
 		}
+		index=index+dir;
 	}
 	return found;
 }
 int findThreeInARow(const int * board,const int cell,int side)
 {
 	int index=cell;
-	int count=1;
+	int count=0;
 	int dir;
 	for(int i=0;i<4;i++)
 	{
-	dir=Directions[i];
-	int posdir=getDirections(board,dir,cell,side);
-	count=count+posdir;
-	int negdir=getDirections(board,-1*dir,cell,side);
-	count=count+negdir;
-	if(count==3)
-		return 1;
-	else
-	 	count=1;
-	}
+		dir=Directions[i];
+		int posdir=getDirections(board,dir,cell,side);
+		count=count+posdir;
+		int negdir=getDirections(board,-1*dir,cell,side);
+		count=count+negdir;
+		//
+		// count is set to 4 because we are double counting the intial cell
+		//
+			if(count==4)
+			{
+				//printf("dir is %d  cell is %d \n",dir,cell);
+				//printf("posdir is %d negdir is %d \n",posdir,negdir);
+
+				return 1;
+			}
+			else
+			 	count=0;
+			}
 	//printf("count %d \n \n",count);
 	return 0;
 
@@ -153,6 +162,7 @@ int getComputerMove(int* board)
 			availableMoves[numFree++]=ConvertTo25[index];
 		}
 	}
+	printf("%d \n",numFree);
 	for(index=0;index<numFree;index++)
 	{
 		makeMove(board,availableMoves[index],NOUGHTS);
@@ -204,7 +214,7 @@ void runGame()
 				printf("Human wins \n \n");
 			Gameover=1;
 		}
-		if(!hasEmpty(board))
+		if(!hasEmpty(board)&&Gameover==0)
 		{
 			printf("Game Over \n \n");
 			printf("It is a draw \n \n");

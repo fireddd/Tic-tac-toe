@@ -85,7 +85,7 @@ int findThreeInARow(const int * board,const int cell,int side)
 	else
 	 	count=1;
 	}
-	printf("count %d \n \n",count);
+	//printf("count %d \n \n",count);
 	return 0;
 
 }
@@ -133,7 +133,7 @@ int getHumanMove(const int* board)
 	return ConvertTo25[move];
 }
 
-int getComputerMove(const int* board)
+int getComputerMove(int* board)
 {
 	int index=0;
 	int numFree=0;
@@ -143,8 +143,25 @@ int getComputerMove(const int* board)
 	{
 		if(board[ConvertTo25[index]]==EMPTY)
 		{
+			makeMove(board,ConvertTo25[index],CROSSES);
+			if(findThreeInARow(board,ConvertTo25[index],CROSSES))
+			{
+				makeMove(board,ConvertTo25[index],EMPTY);
+				return ConvertTo25[index];
+			}
+			makeMove(board,ConvertTo25[index],EMPTY);
 			availableMoves[numFree++]=ConvertTo25[index];
 		}
+	}
+	for(index=0;index<numFree;index++)
+	{
+		makeMove(board,availableMoves[index],NOUGHTS);
+		if(findThreeInARow(board,availableMoves[index],NOUGHTS))
+			{
+				makeMove(board,availableMoves[index],EMPTY);
+				return availableMoves[index];
+			}
+		makeMove(board,availableMoves[index],EMPTY);
 	}
 	randMove=rand()%numFree;
 	return availableMoves[randMove];

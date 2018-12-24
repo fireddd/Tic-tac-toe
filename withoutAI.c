@@ -148,6 +148,8 @@ int getComputerMove(int* board)
 	int numFree=0;
 	int availableMoves[9];
 	int randMove=0;
+	if(board[12]==EMPTY)
+		return ConvertTo25[4];
 	for(index=0;index<9;index++)
 	{
 		if(board[ConvertTo25[index]]==EMPTY)

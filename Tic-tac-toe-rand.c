@@ -1,4 +1,9 @@
-#include <stdio.h>
+//
+// The game assumes that the 1st player to play on the board is the Human
+// The human is given the NOUGHTS 
+// The Computer is given the CROSSES
+//
+#include <stdio.h>	
 #include <stdlib.h>
 #include <string.h>
 
@@ -110,8 +115,6 @@ int getHumanMove(const int* board)
 		fgets(userInput,3,stdin);
 		fflush(stdin);
 
-		//
-		//
 		if(strlen(userInput)!=2)
 		{
 			printf("Invalid String Input\n");
@@ -161,6 +164,7 @@ int getComputerMove(const int* board)
 
 void runGame()
 {
+
 	int Gameover=0;
 	int side=NOUGHTS;
 	int LastMovemade=0;

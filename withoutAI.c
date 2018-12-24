@@ -15,7 +15,11 @@ const int ConvertTo25[9]=
 	11,12,13,
 	16,17,18
 };
-
+const int Middle=4;
+const int Corners[4]=
+{
+	0,2,6,8
+};
 void initaliseBoard(int* board)
 {
 	int index;
@@ -148,8 +152,7 @@ int getComputerMove(int* board)
 	int numFree=0;
 	int availableMoves[9];
 	int randMove=0;
-	if(board[12]==EMPTY)
-		return ConvertTo25[4];
+
 	for(index=0;index<9;index++)
 	{
 		if(board[ConvertTo25[index]]==EMPTY)
@@ -164,7 +167,7 @@ int getComputerMove(int* board)
 			availableMoves[numFree++]=ConvertTo25[index];
 		}
 	}
-	printf("%d \n",numFree);
+	//printf("%d \n",numFree);
 	for(index=0;index<numFree;index++)
 	{
 		makeMove(board,availableMoves[index],NOUGHTS);
@@ -174,6 +177,20 @@ int getComputerMove(int* board)
 				return availableMoves[index];
 			}
 		makeMove(board,availableMoves[index],EMPTY);
+	}
+
+	// Go for the Center
+	if(board[ConvertTo25[Middle]]==EMPTY)
+	{
+		return ConvertTo25[Middle];
+	}
+	//Go for the Corners
+	for(index=0;index<4;index++)
+	{
+		if(board[ConvertTo25[Corners[index]]]==EMPTY)
+		{
+			return ConvertTo25[Corners[index]];
+		}
 	}
 	randMove=rand()%numFree;
 	return availableMoves[randMove];

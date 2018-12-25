@@ -1,5 +1,6 @@
 # Tic-tac-toe
 The aim of the Project is to implement the develop a Tic-Tac-toe playing bot. 
+The game assumes that the human plays first and is given NOUGHTS.(can be changed easily)
 
 There are two functional bots:
 

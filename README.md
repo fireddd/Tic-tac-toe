@@ -24,4 +24,5 @@ Eg:'gcc Minmax.c'.
 This creates an executeable. To run it, you can simply type './a.out'. 
 
 #How to Play
-Enter the number of square you want to play in.
+
+Enter the number of square you want to play in with the squares numbered from 1 to 9.

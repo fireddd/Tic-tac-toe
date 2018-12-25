@@ -15,11 +15,11 @@ const int ConvertTo25[9]=
 	11,12,13,
 	16,17,18
 };
-const int Middle=4;
-const int Corners[4]=
-{
-	0,2,6,8
-};
+
+int ply=0;
+int positions=0;
+int maxply=0;
+
 void initaliseBoard(int* board)
 {
 	int index;
@@ -97,10 +97,52 @@ int findThreeInARow(const int * board,const int cell,int side)
 			}
 			else
 			 	count=0;
-			}
+	}
 	//printf("count %d \n \n",count);
 	return 0;
 
+}
+int findThreeInARowOnTheBoard(const int * board,int side)
+{
+	int count=0;
+	int dir;
+	for(int index=0;index<9;index++)
+	{
+		count=0;
+		for(int i=0;i<4;i++)
+		{
+			dir=Directions[i];
+			int posdir=getDirections(board,dir,ConvertTo25[index],side);
+			count=count+posdir;
+			int negdir=getDirections(board,-1*dir,ConvertTo25[index],side);
+			count=count+negdir;
+				if(count==4)
+				{
+					return 1;
+				}
+				else
+				 	count=0;
+		}
+	}
+	return 0;
+}
+int winningPossible(const int* board,int side)
+{
+	if(side==CROSSES)
+	{
+		if(findThreeInARowOnTheBoard(board,CROSSES))
+			return 1;
+		if(findThreeInARowOnTheBoard(board,NOUGHTS))
+			return -1;
+	}
+	else
+	{
+		if(findThreeInARowOnTheBoard(board,CROSSES))
+			return -1;
+		if(findThreeInARowOnTheBoard(board,NOUGHTS))
+			return 1;
+	}
+	return 0;
 }
 int getHumanMove(const int* board)
 {
@@ -145,57 +187,78 @@ int getHumanMove(const int* board)
 	//printf("Making move ....\n");
 	return ConvertTo25[move];
 }
-
-int getComputerMove(int* board)
+int minMax(int* board,int side)
 {
-	int index=0;
-	int numFree=0;
-	int availableMoves[9];
-	int randMove=0;
-	//Go for the Win
+	int moveList[9];
+	int moveCount=0;
+	int bestScore=-1;
+	int score=-2;
+	int bestMove=-1;
+	int move;
+	int index;
+	if(ply > maxply)
+		maxply=ply;
+	positions++;
+	//
+	//  Check for win
+	//
+	if(ply>0)
+	{
+		score=winningPossible(board,side);
+		if(score!=0)
+		{
+			return score;
+		}
+	}
+	//
+	// Iterate over all the possible moves
+	//
 	for(index=0;index<9;index++)
 	{
 		if(board[ConvertTo25[index]]==EMPTY)
-		{
-			makeMove(board,ConvertTo25[index],CROSSES);
-			if(findThreeInARow(board,ConvertTo25[index],CROSSES))
 			{
-				makeMove(board,ConvertTo25[index],EMPTY);
-				return ConvertTo25[index];
-			}
-			makeMove(board,ConvertTo25[index],EMPTY);
-			availableMoves[numFree++]=ConvertTo25[index];
-		}
+				moveList[moveCount++]=ConvertTo25[index];
+			}		
 	}
-	//printf("%d \n",numFree);
-	//Block the win of the opponent
-	for(index=0;index<numFree;index++)
+	//
+	// Attempts all the moves and applies minmax recursively
+	// Gets the best possible move
+	//
+	for(index=0;index<moveCount;index++)
 	{
-		makeMove(board,availableMoves[index],NOUGHTS);
-		if(findThreeInARow(board,availableMoves[index],NOUGHTS))
-			{
-				makeMove(board,availableMoves[index],EMPTY);
-				return availableMoves[index];
-			}
-		makeMove(board,availableMoves[index],EMPTY);
+		move=moveList[index];
+		board[move]=side;
+		ply++;
+		if(side==CROSSES)
+		score=-minMax(board,NOUGHTS);
+		else
+		score=-minMax(board,CROSSES);
+		if(score>bestScore)
+		{
+			bestScore=score;
+			bestMove=move;
+		}
+		board[move]=EMPTY;
+		ply--;
 	}
+	if(moveCount==0)
+	{
+		bestScore=winningPossible(board,side);
+	}
+	if(ply!=0)
+		return bestScore;
+	else
+		return bestMove;
 
-	// Go for the Center
-	if(board[ConvertTo25[Middle]]==EMPTY)
-	{
-		return ConvertTo25[Middle];
-	}
-	//Go for the Corners
-	for(index=0;index<4;index++)
-	{
-		if(board[ConvertTo25[Corners[index]]]==EMPTY)
-		{
-			return ConvertTo25[Corners[index]];
-		}
-	}
-	//Else go random
-	randMove=rand()%numFree;
-	return availableMoves[randMove];
+}
+int getComputerMove(int* board,int side)
+{
+	ply=0;
+	positions=0;
+	maxply=0;
+	int best=minMax(board,side);
+	printf("The position searched are %d , the move to be made is %d \n", positions,best);
+	return best;
 }
 
 void runGame()
@@ -220,7 +283,7 @@ void runGame()
 		else
 		{
 			//printf("oye else\n");
-			LastMovemade=getComputerMove(&board[0]);
+			LastMovemade=getComputerMove(&board[0],CROSSES);
 			makeMove(&board[0],LastMovemade,CROSSES);
 			printBoard(&board[0]);
 			side=NOUGHTS;
@@ -229,7 +292,7 @@ void runGame()
 		if(findThreeInARow(board,LastMovemade,CROSSES)==1||findThreeInARow(board,LastMovemade,NOUGHTS)==1)
 		{
 			printf("It's over\n \n ");
-			if(side==NOUGHTS)
+			if(side==NOUGHTS) 	
 				printf("Computer wins \n \n");
 			else
 				printf("Human wins \n \n");

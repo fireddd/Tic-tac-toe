@@ -22,3 +22,6 @@ almost definitely be installed unless you have removed it using the command 'gcc
 Eg:'gcc Minmax.c'.
 
 This creates an executeable. To run it, you can simply type './a.out'. 
+
+#How to Play
+Enter the number of square you want to play in.

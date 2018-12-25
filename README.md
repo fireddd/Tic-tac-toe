@@ -10,13 +10,15 @@ the middle squares of the sides. The following bot plays resaonably well and has
 2)The bot uses the MinMax Algorithm to play the optimal tic-tac-toe that is the bot never loses.
 
 
-#How to play
+#How to Run the bot
 
 It is a simple yet easily navigable Tic-Tac-Toe game for the Unix terminal. To run this file, go
 to your Unix terminal and (after you have downloaded this text file, of course) and
 navigate to this file. 
 
 Then, compile and link the program with your compiler which will
-almost definitely be installed unless you have removed it using the command 'gcc Filename.c' Eg:'gcc Minmax.c'.
+almost definitely be installed unless you have removed it using the command 'gcc Filename.c' 
+
+Eg:'gcc Minmax.c'.
 
 This creates an executeable. To run it, you can simply type './a.out'. 
